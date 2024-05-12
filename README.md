@@ -19,11 +19,14 @@ This is a simple Node.js web application written in TypeScript. It demonstrates 
    ```bash
    git clone https://github.com/your-username/your-project.git
 2. Install dependencies:
+   ```bash
    cd your-project
    npm install
 
 4. Build the TypeScript code:
+   ```bash
    npm run build
 
-5. Start the server:
+6. Start the server:
+   ```bash
    npm start
