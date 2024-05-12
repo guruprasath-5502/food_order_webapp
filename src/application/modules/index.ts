@@ -1,3 +1,7 @@
 import { Application } from 'express';
 
-export default (app: Application): void => {};
+import users from './users';
+
+export default (app: Application): void => {
+  users(app);
+};
