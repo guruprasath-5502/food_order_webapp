@@ -1,11 +1,15 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import User from '../../database/models/user';
 
-const createCurrentUser = async (req: Request, res: Response) => {
+const createCurrentUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { auth0Id } = req.body;
 
-    const existingUser = await User.findOne({ auth0Id }).select('-__v');
+    const existingUser = await User.findOne({ auth0Id }).select(['-__v']);
 
     if (existingUser) {
       return res.status(200).send();
@@ -18,13 +22,10 @@ const createCurrentUser = async (req: Request, res: Response) => {
     return res.status(201).json({ status: true, data: newUser.toObject() });
   } catch (error) {
     console.log(error);
-    res.status(500).json({
-      status: false,
-      error: {
-        statusCode: 500,
-        message: 'Error creating user',
-      },
-    });
+
+    const err = new Error('Error creating user');
+    Object.assign(err, { statusCode: 500 });
+    next(err);
   }
 };
 
