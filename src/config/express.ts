@@ -4,6 +4,11 @@ import express from 'express';
 import cors from 'cors';
 
 import routes from '../application/modules/index';
+import logger from '../application/middlewares/logger';
+import {
+  handleError,
+  apiNotFound,
+} from '../application/middlewares/errorHandler';
 
 const expressConfig = () => {
   const app = express();
@@ -18,7 +23,12 @@ const expressConfig = () => {
   app.use(express.json({ limit: '15mb' }));
   app.use(express.urlencoded({ limit: '15mb', extended: true }));
 
+  app.use(logger);
+
   routes(app);
+
+  app.use(apiNotFound);
+  app.use(handleError);
 
   const server = http.createServer(app);
 
