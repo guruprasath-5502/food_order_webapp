@@ -10,34 +10,29 @@ export type UserType = Document & {
   flgUseStatus: number;
 };
 
-const userSchema: Schema<UserType> = new mongoose.Schema(
-  {
-    auth0Id: {
-      type: String,
-      required: true,
-    },
-    email: {
-      type: String,
-      required: true,
-    },
-    name: {
-      type: String,
-    },
-    addressLine1: {
-      type: String,
-    },
-    country: {
-      type: String,
-    },
-    flgUseStatus: {
-      type: Number,
-      default: 1,
-    },
+const userSchema: Schema<UserType> = new mongoose.Schema({
+  auth0Id: {
+    type: String,
+    required: true,
   },
-  {
-    versionKey: false, // This line excludes the "__v" field from queries
-  }
-);
+  email: {
+    type: String,
+    required: true,
+  },
+  name: {
+    type: String,
+  },
+  addressLine1: {
+    type: String,
+  },
+  country: {
+    type: String,
+  },
+  flgUseStatus: {
+    type: Number,
+    default: 1,
+  },
+});
 
 const User: Model<UserType> = mongoose.model<UserType>('User', userSchema);
 
