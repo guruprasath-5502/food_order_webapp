@@ -7,6 +7,7 @@ export type UserType = Document & {
   name?: string;
   addressLine1?: string;
   country?: string;
+  city?: string;
   flgUseStatus: number;
 };
 
@@ -23,6 +24,9 @@ const userSchema: Schema<UserType> = new mongoose.Schema({
     type: String,
   },
   addressLine1: {
+    type: String,
+  },
+  city: {
     type: String,
   },
   country: {
