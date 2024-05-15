@@ -9,6 +9,7 @@ import {
   handleError,
   apiNotFound,
 } from '../application/middlewares/errorHandler';
+import { health } from '../application/utils/health';
 
 const expressConfig = () => {
   const app = express();
@@ -24,6 +25,8 @@ const expressConfig = () => {
   app.use(express.urlencoded({ limit: '15mb', extended: true }));
 
   app.use(logger);
+
+  app.get('/health', health);
 
   routes(app);
 
