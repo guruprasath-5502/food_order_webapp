@@ -58,6 +58,27 @@ const updateCurrentUser = async (
   }
 };
 
-const userController = { createCurrentUser, updateCurrentUser };
+const getCurrentUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const currentUser = await User.findById(req.userId).select(['-__v']);
+
+    if (!currentUser) {
+      const err = new Error('User not found');
+      Object.assign(err, { statusCode: 404 });
+      return next(err);
+    }
+
+    return res.status(200).json({ status: true, data: currentUser.toObject() });
+  } catch (error) {
+    console.log(error);
+    next(new Error('Error getting user'));
+  }
+};
+
+const userController = { createCurrentUser, updateCurrentUser, getCurrentUser };
 
 export default userController;

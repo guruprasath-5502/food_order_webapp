@@ -1,7 +1,9 @@
 import { auth } from 'express-oauth2-jwt-bearer';
 import jwt from 'jsonwebtoken';
 import 'dotenv/config';
+
 import { NextFunction, Request, Response } from 'express';
+
 import User from '../database/models/user';
 
 declare global {
