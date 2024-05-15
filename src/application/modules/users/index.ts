@@ -1,9 +1,17 @@
 import { Application } from 'express';
-import userController from './users.server.controller';
 import { jwtCheck, jwtParse } from '../../middlewares/auth';
 import { validateMyUserRequest } from '../../middlewares/validator';
+import userController from './users.server.controller';
 
 export default function (app: Application): void {
+  //get user details
+  app.get(
+    '/api/user/myuser',
+    jwtCheck,
+    jwtParse,
+    userController.getCurrentUser
+  );
+
   //creates user data in db after authenticating in auth0, if already exists simply returns ok
   app.post('/api/user/myuser', jwtCheck, userController.createCurrentUser);
 
