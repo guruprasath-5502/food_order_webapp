@@ -1,6 +1,7 @@
 import { Server } from 'http';
 
 import bluebird from 'bluebird';
+import { v2 as cloudinary } from 'cloudinary';
 import 'dotenv/config';
 
 import mongoose from './config/mongoose';
@@ -15,6 +16,13 @@ const startServer = async () => {
     const database = await mongoose();
 
     console.log('Database Connection Established');
+
+    cloudinary.config({
+      cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+      api_key: process.env.CLOUDINARY_API_KEY,
+      api_secret: process.env.CLOUDINARY_API_SECRET,
+      secure: true,
+    });
 
     const app = express();
 

@@ -1,7 +1,7 @@
 import { Application } from 'express';
 import { jwtCheck, jwtParse } from '../../middlewares/auth';
-import { validateMyUserRequest } from '../../middlewares/validator';
 import userController from './users.server.controller';
+import { validateMyUserRequest } from './users.server.validation';
 
 export default function (app: Application): void {
   //get user details
