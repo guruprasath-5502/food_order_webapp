@@ -7,6 +7,14 @@ import restaurantController from './restaurants.server.controller';
 import { validateRestaurantRequest } from './restaurants.server.validation';
 
 export default function (app: Application): void {
+  // get the restaurant
+  app.get(
+    '/api/user/restaurant',
+    jwtCheck,
+    jwtParse,
+    restaurantController.getMyRestaurant
+  );
+
   // creates new restaurant
   app.post(
     '/api/user/restaurant',
@@ -15,5 +23,15 @@ export default function (app: Application): void {
     upload.single('imageFile'),
     validateRestaurantRequest,
     restaurantController.createMyRestaurant
+  );
+
+  // Update Restaurant
+  app.put(
+    '/api/user/restaurant',
+    jwtCheck,
+    jwtParse,
+    upload.single('imageFile'),
+    validateRestaurantRequest,
+    restaurantController.updateMyRestaurant
   );
 }
