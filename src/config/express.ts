@@ -24,9 +24,9 @@ const expressConfig = () => {
   app.use(express.json({ limit: '15mb' }));
   app.use(express.urlencoded({ limit: '15mb', extended: true }));
 
-  app.get('/health', health);
-
   app.use(logger);
+
+  app.get('/health', health);
 
   routes(app);
 
