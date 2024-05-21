@@ -4,6 +4,7 @@ import { NextFunction, Request, Response } from 'express';
 
 import Restaurant from '../../database/models/restaurant';
 import uploadImage from '../../utils/uploadImage';
+import Order from '../../database/models/order';
 
 const createMyRestaurant = async (
   req: Request,
@@ -102,10 +103,74 @@ const updateMyRestaurant = async (
   }
 };
 
+const getMyRestaurantOrder = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const restaurant = await Restaurant.findOne({ user: req.userId });
+
+    if (!restaurant) {
+      const err = new Error('Restaurant not found');
+      Object.assign(err, { statusCode: 404 });
+      return next(err);
+    }
+
+    const orders = await Order.find({ restaurant: restaurant._id })
+      .populate('restaurant')
+      .populate('user');
+
+    return res.json({ status: true, data: orders });
+  } catch (error) {
+    console.log(error);
+    next(new Error('Error fetching restaurant orders'));
+  }
+};
+
+const updateOrderStatus = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { orderId } = req.params;
+
+    const { status } = req.body;
+
+    const order = await Order.findById(orderId);
+
+    if (!order) {
+      const err = new Error('Order not found');
+      Object.assign(err, { statusCode: 404 });
+      return next(err);
+    }
+
+    const restaurant = await Restaurant.findById(order.restaurant._id);
+
+    if (restaurant?.user?._id.toString() !== req.userId) {
+      const err = new Error('Invalid User');
+      Object.assign(err, { statusCode: 401 });
+      return next(err);
+    }
+
+    order.status = status;
+
+    await order.save();
+
+    return res.json({ status: true, data: order.toObject() });
+  } catch (error) {
+    console.log(error);
+    next(new Error('Error fetching order'));
+  }
+};
+
 const restaurantController = {
   createMyRestaurant,
   getMyRestaurant,
   updateMyRestaurant,
+  getMyRestaurantOrder,
+  updateOrderStatus,
 };
 
 export default restaurantController;

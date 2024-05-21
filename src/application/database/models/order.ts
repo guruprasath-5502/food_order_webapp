@@ -17,7 +17,7 @@ export type OrderType = Document & {
   flgUseStatus: number;
 };
 
-type MenuItem = {
+type MenuItem = Document & {
   menuItemId: string;
   quantity: string;
   name: string;
