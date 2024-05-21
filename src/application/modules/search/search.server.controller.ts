@@ -76,6 +76,30 @@ const searchRestaurants = async (
   }
 };
 
-const searchController = { searchRestaurants };
+const getRestaurants = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const restaurantId = req.params.restaurantId;
+
+    const restaurant = await Restaurant.findById(restaurantId);
+
+    if (!restaurant) {
+      console.log('edfsaef', restaurantId);
+      const err = new Error('Restaurant not found');
+      Object.assign(err, { statusCode: 404 });
+      return next(err);
+    }
+
+    return res.status(200).json({ status: true, data: restaurant.toObject() });
+  } catch (error) {
+    console.log(error);
+    next(new Error('Error fetching data'));
+  }
+};
+
+const searchController = { searchRestaurants, getRestaurants };
 
 export default searchController;
