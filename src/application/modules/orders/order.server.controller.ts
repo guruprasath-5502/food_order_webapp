@@ -181,6 +181,24 @@ const createCheckoutSession = async (
   }
 };
 
-const orderController = { createCheckoutSession, stripeWebhookHandler };
+const getMyOrder = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const orders = await Order.find({ user: req.userId })
+      .select('-__v')
+      .populate('restaurant')
+      .populate('user');
+
+    return res.json({ status: true, data: orders });
+  } catch (error) {
+    console.log(error);
+    next(new Error('Error fetching order status'));
+  }
+};
+
+const orderController = {
+  createCheckoutSession,
+  stripeWebhookHandler,
+  getMyOrder,
+};
 
 export default orderController;
