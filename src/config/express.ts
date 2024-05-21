@@ -10,9 +10,12 @@ import {
   apiNotFound,
 } from '../application/middlewares/errorHandler';
 import { health } from '../application/utils/health';
+import helmet from 'helmet';
 
 const expressConfig = () => {
   const app = express();
+
+  app.use(helmet());
 
   app.use(
     cors({
